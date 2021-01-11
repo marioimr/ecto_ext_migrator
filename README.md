@@ -1,21 +1,17 @@
 # DbMigrator
 
-**TODO: Add description**
+**Execute Ecto migrations from an external executable**
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `db_migrator` to your list of dependencies in `mix.exs`:
+Simply run:
 
-```elixir
-def deps do
-  [
-    {:db_migrator, "~> 0.1.0"}
-  ]
-end
+```bash
+mix escript.build
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/db_migrator](https://hexdocs.pm/db_migrator).
+## Use
 
+```bash
+./db_migrator -d DATABASE_NAME -u USER_NAME -p PASSWORD -h HOST -P PORT_NUMBER --path PATH_TO_THE_MIGRATIONS
+```
