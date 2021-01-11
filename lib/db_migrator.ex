@@ -11,12 +11,10 @@ defmodule DbMigrator do
 
     case start_db(db_opts) do
       {:ok, _} ->
-        IO.inspect("started")
         migrate(path)
         System.stop(0)
 
       _ ->
-        IO.inspect("error")
         System.stop(1)
     end
   end
@@ -41,7 +39,7 @@ defmodule DbMigrator do
 
   defp start_db(opts) do
     Application.put_env(:db_migrator, DbMigrator.Repo, opts)
-    DbMigrator.Repo.start_link() |> IO.inspect()
+    DbMigrator.Repo.start_link()
   end
 
   defp migrate(path) do
