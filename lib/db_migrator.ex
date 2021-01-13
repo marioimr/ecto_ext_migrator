@@ -13,8 +13,6 @@ defmodule DbMigrator do
       opts
       |> Keyword.pop(:step)
 
-    start_db(db_opts)
-
     case start_db(db_opts) do
       {:ok, _} ->
         migrate(direction, step)
@@ -56,8 +54,6 @@ defmodule DbMigrator do
   def start_db(opts) do
     Application.put_env(:db_migrator, DbMigrator.Repo, opts)
     DbMigrator.Repo.start_link()
-
-    Ecto.Migrator.migrations_path(DbMigrator.Repo) |> IO.inspect()
   end
 
   def migrate("down", arg) do
