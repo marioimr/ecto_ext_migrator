@@ -14,15 +14,15 @@ defmodule DbMigrator do
       |> Keyword.pop(:step)
 
     start_db(db_opts)
-    migrate(direction, step)
-    # case start_db(db_opts) do
-    #   {:ok, _} ->
-    #     migrate(direction, step)
-    #     System.stop(0)
 
-    #   _ ->
-    #     System.stop(1)
-    # end
+    case start_db(db_opts) do
+      {:ok, _} ->
+        migrate(direction, step)
+        System.stop(0)
+
+      _ ->
+        System.stop(1)
+    end
   end
 
   def parse_args(args) do
