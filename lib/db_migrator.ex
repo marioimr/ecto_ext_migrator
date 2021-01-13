@@ -4,14 +4,20 @@ defmodule DbMigrator do
   """
 
   def main(args \\ []) do
-    {path, db_opts} =
+    {direction, opts} =
       args
       |> parse_args()
-      |> Keyword.pop(:path)
+      |> Keyword.pop(:direction)
+
+    {step, db_opts} =
+      opts
+      |> Keyword.pop(:step)
+
+    start_db(db_opts)
 
     case start_db(db_opts) do
       {:ok, _} ->
-        migrate(path)
+        migrate(direction, step)
         System.stop(0)
 
       _ ->
@@ -19,30 +25,62 @@ defmodule DbMigrator do
     end
   end
 
-  defp parse_args(args) do
+  def parse_args(args) do
     {opts, _, _} =
       args
       |> OptionParser.parse(
-        switches: [
+        strict: [
           database: :string,
           user: :string,
           password: :string,
           host: :string,
           port: :string,
-          path: :string
+          priv: :string,
+          direction: :string,
+          step: :integer
         ],
-        aliases: [d: :database, u: :user, p: :password, h: :host, P: :port]
+        aliases: [
+          d: :database,
+          u: :user,
+          p: :password,
+          h: :host,
+          P: :port,
+          D: :direction,
+          s: :step
+        ]
       )
 
     opts
   end
 
-  defp start_db(opts) do
+  def start_db(opts) do
     Application.put_env(:db_migrator, DbMigrator.Repo, opts)
     DbMigrator.Repo.start_link()
+
+    Ecto.Migrator.migrations_path(DbMigrator.Repo) |> IO.inspect()
   end
 
-  defp migrate(path) do
-    Ecto.Migrator.run(DbMigrator.Repo, path, :up, all: true)
+  def migrate("down", arg) do
+    opts =
+      case arg do
+        nil -> [step: 1]
+        step -> [step: step]
+      end
+
+    Ecto.Migrator.with_repo(DbMigrator.Repo, &Ecto.Migrator.run(&1, :down, opts))
+  end
+
+  def migrate("up", arg) do
+    opts =
+      case arg do
+        nil -> [all: true]
+        step -> [step: step]
+      end
+
+    Ecto.Migrator.with_repo(DbMigrator.Repo, &Ecto.Migrator.run(&1, :up, opts))
+  end
+
+  def migrate(_, _) do
+    raise(~s/Invalid direction, pass "-d up" or "-d down"/)
   end
 end
