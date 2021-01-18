@@ -81,6 +81,6 @@ defmodule DbMigrator do
   end
 
   def migrate(_, _) do
-    raise(~s/Invalid direction, pass "-d up" or "-d down"/)
+    raise(~s/Invalid direction, pass "-D up" or "-D down"/)
   end
 end
