@@ -52,7 +52,11 @@ defmodule DbMigrator do
   end
 
   def start_db(opts) do
-    Application.put_env(:db_migrator, DbMigrator.Repo, opts)
+    url =
+      "ecto://" <>
+        opts[:user] <> ":" <> opts[:password] <> "@" <> opts[:host] <> "/" <> opts[:database]
+
+    Application.put_env(:db_migrator, DbMigrator.Repo, url: url)
     DbMigrator.Repo.start_link()
   end
 
