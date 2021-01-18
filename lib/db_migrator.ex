@@ -33,7 +33,7 @@ defmodule DbMigrator do
           password: :string,
           host: :string,
           port: :string,
-          priv: :string,
+          path: :string,
           direction: :string,
           step: :integer
         ],
@@ -56,7 +56,7 @@ defmodule DbMigrator do
       "ecto://" <>
         opts[:user] <> ":" <> opts[:password] <> "@" <> opts[:host] <> "/" <> opts[:database]
 
-    Application.put_env(:db_migrator, DbMigrator.Repo, url: url)
+    Application.put_env(:db_migrator, DbMigrator.Repo, url: url, priv: opts[:path])
     DbMigrator.Repo.start_link()
   end
 
