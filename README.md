@@ -18,7 +18,7 @@ MIX_ENV=prod mix escript.build
 e.g.
 
 ```bash
-./db_migrator -d qsi_search_service_dev -u postgres -p postgres -h localhost -P 5432 --priv /Users/imr/work/inSite_DB_Migrations/priv/repo/ -D up
+./db_migrator -d qsi_search_service_dev -u postgres -p postgres -h localhost -P 5432 --path /Users/imr/work/inSite_DB_Migrations/priv/repo/ -D up
 ```
 
 ### Fields
